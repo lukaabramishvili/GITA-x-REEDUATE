@@ -40,7 +40,21 @@
 
 function mostFrequent(arrfrequent){
     const frequency = {};
-    arrfrequent
+    arrfrequent.forEach(num => {
+        frequency[num] = (frequency[num] || 0) + 1;
+    });
+
+    let mostFrequentNum = arrfrequent[0];
+    let maxFrequency = frequency[mostFrequentNum];
+
+    for (const num in frequency) {
+        if (frequency[num] > maxFrequency) {
+            mostFrequentNum = num;
+            maxFrequency = frequency[num];
+        }
+    }
+
+    return mostFrequentNum;
 }
 
-console.log(mostFrequent([1, 2, 2, 3, 3, 3]));
+console.log(mostFrequent([1, 2, 2, 3, 3, 3, 15, 15, 15, 15]));
