@@ -51,7 +51,7 @@
 // 4
 // function averageAge(users) {
 //     const result = {}
-    
+
 //     users.forEach(user => {
 //         if (!result[user.dept]) {
 //             result[user.dept] = {
@@ -59,7 +59,7 @@
 //                 count: 0
 //             }
 //         }
-        
+
 //         result[user.dept].totalAge += user.age;
 //         result[user.dept].count++;
 //     });
@@ -86,10 +86,100 @@
 
 
 // 5
-function countWorlds(words) {
-    const wordCount = {};
+// function countWorlds(words) {
+//     const eachWordCount = {};
+//     let wordCount = 0;
 
-    words.forEach(word => {
-        
-    });
-}
+//     words.forEach(word => {
+//         const comments = word.comment.split(' ');
+//         comments.forEach(comment => {
+//             wordCount++;
+//         });
+//         comments.forEach(comment => {
+//             if (comment) {
+//                 eachWordCount[comment] = (eachWordCount[comment] || 0) + 1;
+//             }
+//         });
+//     });
+
+//     return { eachWordCount, wordCount };
+// }
+
+// console.log(countWorlds([{
+//     id: 1,
+//     comment: "Hello world"
+// }, {
+//     id: 2,
+//     comment: "This is great!"
+// }, {
+//     id: 3,
+//     comment: ""
+// }]));
+
+
+
+// 6
+// function groupByDepartment(users) {
+//   const grouped = {};
+
+//   users.forEach(user => {
+//     if (!grouped[user.department]) {
+//       grouped[user.department] = [];
+//     }
+
+//     grouped[user.department].push(user);
+//   });
+
+//   for (const department in grouped) {
+//     grouped[department].sort((a, b) => b.salary - a.salary);
+//   }
+
+//   return grouped;
+// }
+
+// console.log(
+//   groupByDepartment([
+//     { name: "Ana", department: "HR", salary: 2000 },
+//     { name: "Nika", department: "IT", salary: 5000 },
+//     { name: "Luka", department: "IT", salary: 3500 },
+//     { name: "Mariam", department: "HR", salary: 3000 }
+//   ])
+// );
+
+
+
+// 7
+// function finalPrice(cart) {
+//   return cart.reduce((sum, item) => {
+//     const discountedPrice =
+//       item.price - (item.price * item.discountPercent) / 100;
+
+//     return sum + discountedPrice * item.quantity;
+//   }, 0);
+// }
+
+// console.log(
+//   finalPrice([
+//     { title: "Laptop", price: 2000, quantity: 1, discountPercent: 10 },
+//     { title: "Mouse", price: 50, quantity: 2, discountPercent: 0 },
+//     { title: "Keyboard", price: 100, quantity: 1, discountPercent: 20 }
+//   ])
+// );
+
+
+
+// 8
+// function usersToObject(users) {
+//   return users.reduce((obj, user) => {
+//     obj[user.id] = user;
+//     return obj;
+//   }, {});
+// }
+
+// console.log(
+//   usersToObject([
+//     { id: 1, name: "Ana", age: 25 },
+//     { id: 2, name: "Nika", age: 30 },
+//     { id: 3, name: "Luka", age: 22 }
+//   ])
+// );
