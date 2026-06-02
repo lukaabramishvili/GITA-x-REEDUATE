@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #quote,
+        #users,
+        #carInfo {
+            margin-top: 20px;
+        }
+
+        .user {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        input {
+            padding: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>1. Mouse Debounce</h2>
+    <p>გაამოძრავე მაუსი და კოორდინატები მხოლოდ გაჩერების შემდეგ დაილოგება Console-ში.</p>
+
+    <hr>
+
+    <h2>2. Random Quote</h2>
+
+    <button id="quoteBtn">Get Quote</button>
+
+    <div id="quote"></div>
+
+    <hr>
+
+    <h2>3. Users Pagination</h2>
+
+    <div id="users"></div>
+
+    <button id="prevBtn">Previous</button>
+    <span id="pageNumber">1</span>
+    <button id="nextBtn">Next</button>
+
+    <hr>
+
+    <h2>4. Search Car By ID</h2>
+
+    <input
+        type="number"
+        id="carId"
+        placeholder="Enter Car ID"
+    >
+
+    <div id="carInfo"></div>
+
+    <script>
+        // 1. Debounce Mouse Move
+
+        function debounce(fn, delay) {
+            let timeout;
+
+            return function (...args) {
+                clearTimeout(timeout);
+
+                timeout = setTimeout(() => {
+                    fn.apply(this, args);
+                }, delay);
+            };
+        }
+
+        const logMousePosition = debounce((e) => {
+            console.log(
+                "Mouse Stopped:",
+                e.clientX,
+                e.clientY
+            );
+        }, 500);
+
+        window.addEventListener(
+            "mousemove",
+            logMousePosition
+        );
+
+        // 2. Random Quote
+
+        const quoteBtn =
+            document.getElementById("quoteBtn");
+
+        const quoteContainer =
+            document.getElementById("quote");
+
+        quoteBtn.addEventListener(
+            "click",
+            async () => {
+                try {
+                    const response = await fetch(
+                        "https://dummyjson.com/quotes"
+                    );
+
+                    const data =
+                        await response.json();
+
+                    const randomIndex =
+                        Math.floor(
+                            Math.random() *
+                            data.quotes.length
+                        );
+
+                    const quote =
+                        data.quotes[randomIndex];
+
+                    quoteContainer.innerHTML = `
+                        <h3>${quote.author}</h3>
+                        <p>${quote.quote}</p>
+                    `;
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        );
+
+        // 3. Users Pagination
+
+        const usersContainer =
+            document.getElementById("users");
+
+        const pageNumber =
+            document.getElementById("pageNumber");
+
+        let currentPage = 1;
+        const limit = 30;
+        let totalPages = 1;
+
+        async function getUsers(page) {
+            try {
+                const skip =
+                    (page - 1) * limit;
+
+                const response =
+                    await fetch(
+                        `https://dummyjson.com/users?limit=${limit}&skip=${skip}`
+                    );
+
+                const data =
+                    await response.json();
+
+                totalPages = Math.ceil(
+                    data.total / limit
+                );
+
+                usersContainer.innerHTML = "";
+
+                data.users.forEach((user) => {
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.classList.add("user");
+
+                    div.innerHTML = `
+                        <h4>${user.firstName} ${user.lastName}</h4>
+                        <p>${user.email}</p>
+                    `;
+
+                    usersContainer.appendChild(
+                        div
+                    );
+                });
+
+                pageNumber.textContent = page;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        document
+            .getElementById("nextBtn")
+            .addEventListener(
+                "click",
+                () => {
+                    if (
+                        currentPage <
+                        totalPages
+                    ) {
+                        currentPage++;
+                        getUsers(
+                            currentPage
+                        );
+                    }
+                }
+            );
+
+        document
+            .getElementById("prevBtn")
+            .addEventListener(
+                "click",
+                () => {
+                    if (
+                        currentPage > 1
+                    ) {
+                        currentPage--;
+                        getUsers(
+                            currentPage
+                        );
+                    }
+                }
+            );
+
+        getUsers(currentPage);
+
+        // 4. Car Search By ID
+
+        const carInput =
+            document.getElementById(
+                "carId"
+            );
+
+        const carInfo =
+            document.getElementById(
+                "carInfo"
+            );
+
+        carInput.addEventListener(
+            "change",
+            async () => {
+                const id =
+                    carInput.value;
+
+                if (!id) return;
+
+                try {
+                    const response =
+                        await fetch(
+                            `https://myfakeapi.com/api/cars/${id}`
+                        );
+
+                    if (
+                        !response.ok
+                    ) {
+                        throw new Error(
+                            "Invalid ID"
+                        );
+                    }
+
+                    const data =
+                        await response.json();
+
+                    const car =
+                        data.Car;
+
+                    carInfo.innerHTML = `
+                        <h3>${car.car}</h3>
+                        <p>Model: ${car.car_model}</p>
+                        <p>Color: ${car.car_color}</p>
+                        <p>Year: ${car.car_model_year}</p>
+                        <p>Price: ${car.price}</p>
+                    `;
+                } catch (error) {
+                    alert(
+                        "გთხოვთ შეიყვანოთ სწორი ID"
+                    );
+
+                    carInfo.innerHTML =
+                        "";
+                }
+            }
+        );
+    </script>
+
+</body>
+</html>
