@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Khvicha Kvaratskhelia",
+    "nation": "georgia",
+    "position": "winger",
+    "age": 24
+  },
+  {
+    "id": 2,
+    "name": "Jamal Musiala",
+    "nation": "germany",
+    "position": "midfielder",
+    "age": 23
+  }
+]
